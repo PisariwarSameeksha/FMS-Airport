@@ -11,4 +11,6 @@ import com.fms.airport.entity.Airport;
 public interface AirportRepository extends JpaRepository<Airport, Integer>{
 
 	Optional<Airport> findByAirportId(String airportId);
+	
+	Airport  findByAirportName(String airportName);
 }
