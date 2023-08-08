@@ -26,18 +26,20 @@ public class AirportServiceImpl implements AirportService{
 	private ModelMapper modelMapper;
 	
 	@Override
-	public AirportDTO addAirport(Airport newAirport){
+	public String  addAirport(AirportDTO newAirportDTO){
 		
-		airportRepository.save(newAirport);
+		Airport airport = modelMapper.map(newAirportDTO, Airport.class);
 		
-		return modelMapper.map(newAirport, AirportDTO.class);
+		airportRepository.save(airport);
+		
+		return "new Airport successfully added";
 	}
 	
 
 	@Override
 	public AirportDTO getAirportById(String id) throws AirportNotFoundException {
 		Optional<Airport> optAirport = this.airportRepository.findByAirportId(id);
-		if(optAirport == null) {
+		if(optAirport.isEmpty()) {
 			throw new AirportNotFoundException("Airport doesn't exist for given id");
 		}
 		Airport airport = optAirport.get();
@@ -73,7 +75,7 @@ public class AirportServiceImpl implements AirportService{
 //	
 
 	@Override
-	public AirportDTO removeAirportById(String id) throws AirportNotFoundException {
+	public String removeAirportById(String id) throws AirportNotFoundException {
 		Optional<Airport> optAirport = this.airportRepository.findByAirportId(id);
 		if(optAirport == null) {
 			throw new AirportNotFoundException("Airport doesn't exist for given id");
@@ -82,13 +84,13 @@ public class AirportServiceImpl implements AirportService{
 		airportRepository.delete(airport);
 		
 		
-		return modelMapper.map(airport, AirportDTO.class);
+		return "Airport deleted successfully";
 	}
 	
 	@Override
 	public AirportDTO getAirportByName(String name) throws AirportNotFoundException {
 		Optional<Airport> optAirport = this.airportRepository.findByAirportName(name);
-		if(optAirport == null) {
+		if(optAirport.isEmpty()) {
 			throw new AirportNotFoundException("Airport doesn't exist for given id");
 		}
 		Airport airport = optAirport.get();
