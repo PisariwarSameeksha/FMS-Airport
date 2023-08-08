@@ -2,6 +2,7 @@ package com.fms.airport.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,8 @@ public class AirportServiceImpl implements AirportService{
 	private ModelMapper modelMapper;
 	
 	@Override
-	public AirportDTO addAirport(Airport newAirport) throws AirportAlreadyExistsException {
-		Optional<Airport> optAirport = this.airportRepository.findByAirportId(newAirport.getAirportId());
-		if(optAirport != null) {
-			throw new AirportAlreadyExistsException("AirportId already exists");
-		}
+	public AirportDTO addAirport(Airport newAirport){
+		
 		airportRepository.save(newAirport);
 		
 		return modelMapper.map(newAirport, AirportDTO.class);
@@ -51,22 +49,51 @@ public class AirportServiceImpl implements AirportService{
 
 	@Override
 	public List<AirportDTO> getAllAirports() {
+		List<Airport> Airport = airportRepository.findAll();
+
+		List<AirportDTO> airportDTO = Airport.stream()
+
+		.map(list -> modelMapper
+
+		.map(list, AirportDTO.class ))
+
+		.collect(Collectors.toList());
+
+		return airportDTO;
 		
-		return Collections.emptyList();
+		
 	}
 
 
-	@Override
-	public AirportDTO changeNameById(String newName, String id) throws AirportNotFoundException {
-		
-		return null;
-	}
-	
+//	@Override
+//	public AirportDTO changeNameById(String newName, String id) throws AirportNotFoundException {
+//		
+//		return null;
+//	}
+//	
 
 	@Override
 	public AirportDTO removeAirportById(String id) throws AirportNotFoundException {
+		Optional<Airport> optAirport = this.airportRepository.findByAirportId(id);
+		if(optAirport == null) {
+			throw new AirportNotFoundException("Airport doesn't exist for given id");
+		}
+		Airport airport = optAirport.get();
+		airportRepository.delete(airport);
 		
-		return null;
+		
+		return modelMapper.map(airport, AirportDTO.class);
+	}
+	
+	@Override
+	public AirportDTO getAirportByName(String name) throws AirportNotFoundException {
+		Optional<Airport> optAirport = this.airportRepository.findByAirportName(name);
+		if(optAirport == null) {
+			throw new AirportNotFoundException("Airport doesn't exist for given id");
+		}
+		Airport airport = optAirport.get();
+		
+		return modelMapper.map(airport, AirportDTO.class);
 	}
 
 }

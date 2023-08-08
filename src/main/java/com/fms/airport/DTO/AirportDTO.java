@@ -23,6 +23,11 @@ public class AirportDTO {
 	public void setAirportLocation(String airportLocation) {
 		this.airportLocation = airportLocation;
 	}
+	
+	
+	public AirportDTO() {
+		super();
+	}
 	public AirportDTO(String airportId, String airportName, String airportLocation) {
 		super();
 		this.airportId = airportId;

@@ -16,6 +16,11 @@ public class Airport {
 	@NotNull
 	String airportLocation;
 	
+	
+	
+	public Airport() {
+		super();
+	}
 	public String getAirportId() {
 		return airportId;
 	}

@@ -11,13 +11,15 @@ import com.fms.airport.exception.AirportNotFoundException;
 
 public interface AirportService {
 
-	AirportDTO addAirport(Airport newAirport) throws AirportAlreadyExistsException;
+	AirportDTO addAirport(Airport newAirport);
 	
 	AirportDTO getAirportById(String id) throws AirportNotFoundException;
 	
+	AirportDTO getAirportByName(String name) throws AirportNotFoundException;
+	
 	List<AirportDTO> getAllAirports();
 	
-	AirportDTO changeNameById(String newName, String id) throws AirportNotFoundException;
+	//AirportDTO changeNameById(String newName, String id) throws AirportNotFoundException;
 	
 	AirportDTO removeAirportById(String id) throws AirportNotFoundException;
 	
