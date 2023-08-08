@@ -5,4 +5,5 @@ public class AirportNotFoundException extends Exception{
 		super(msg);
 	}
 
+
 }
