@@ -6,14 +6,20 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fms.airport.DTO.AirportDTO;
+import com.fms.airport.DTO.ScheduleFlightDTO;
 import com.fms.airport.entity.Airport;
 import com.fms.airport.exception.AirportAlreadyExistsException;
 import com.fms.airport.exception.AirportNotFoundException;
 import com.fms.airport.repository.AirportRepository;
 
+import reactor.core.publisher.Mono;
+
+import java.util.Arrays;
 import java.util.Collections;
 
 @Service
@@ -24,6 +30,9 @@ public class AirportServiceImpl implements AirportService{
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private WebClient webclient;
 	
 	@Override
 	public String  addAirport(AirportDTO newAirportDTO){
@@ -97,5 +106,22 @@ public class AirportServiceImpl implements AirportService{
 		
 		return modelMapper.map(airport, AirportDTO.class);
 	}
+
+
+	@Override
+	public List<ScheduleFlightDTO> getNumberOfScheduleFlights() {
+		Mono<ScheduleFlightDTO[]> response = webclient.get()
+				.uri("http://localhost:8093/api/scheduleFlight/schedules")
+				.accept(MediaType.APPLICATION_JSON)
+		.retrieve()
+		. bodyToMono(ScheduleFlightDTO[].class).log();
+		
+		ScheduleFlightDTO[] scheduleFlights = response.block();
+		
+		
+		return Arrays.stream(scheduleFlights)
+				.collect(Collectors.toList());
+	}
+	
 
 }

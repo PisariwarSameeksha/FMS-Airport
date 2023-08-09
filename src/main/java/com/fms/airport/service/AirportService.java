@@ -3,6 +3,7 @@ package com.fms.airport.service;
 import java.util.List;
 
 import com.fms.airport.DTO.AirportDTO;
+import com.fms.airport.DTO.ScheduleFlightDTO;
 import com.fms.airport.entity.Airport;
 import com.fms.airport.exception.AirportAlreadyExistsException;
 import com.fms.airport.exception.AirportNotFoundException;
@@ -21,5 +22,6 @@ public interface AirportService {
 
 	String removeAirportById(String id) throws AirportNotFoundException;
 	
+	List<ScheduleFlightDTO> getNumberOfScheduleFlights();
 	
 }

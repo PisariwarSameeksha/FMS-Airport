@@ -12,15 +12,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fms.airport.DTO.AirportDTO;
-
+import com.fms.airport.DTO.ScheduleFlightDTO;
 import com.fms.airport.exception.AirportNotFoundException;
 import com.fms.airport.service.AirportService;
 
 @RestController
+@RequestMapping("/api/airports")
 public class AirportController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AirportController.class);
@@ -86,6 +88,14 @@ public class AirportController {
 			logger.warn("Flight with Id {} not found for removal", id);
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aiport not found");
 		}
+	}
+	
+	@GetMapping("/airports/schedules")
+	public ResponseEntity<List<ScheduleFlightDTO>> getAllSchedules(){
+		logger.info("Received a request to get scheduled flights");
+		List<ScheduleFlightDTO> flights = airportService.getNumberOfScheduleFlights();
+		return ResponseEntity.status(HttpStatus.OK).body(flights);
+		
 	}
 
 }
