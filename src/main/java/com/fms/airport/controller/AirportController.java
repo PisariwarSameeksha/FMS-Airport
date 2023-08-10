@@ -21,7 +21,7 @@ import com.fms.airport.DTO.ScheduleFlightDTO;
 import com.fms.airport.exception.AirportNotFoundException;
 import com.fms.airport.service.AirportService;
 
-@RestController
+@RestController 
 @RequestMapping("/api/airports")
 public class AirportController {
 
