@@ -119,6 +119,7 @@ public class AirportServiceImpl implements AirportService{
 		ScheduleFlightDTO[] scheduleFlights = response.block();
 		
 		
+		
 		return Arrays.stream(scheduleFlights)
 				.collect(Collectors.toList());
 	}
