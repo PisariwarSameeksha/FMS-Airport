@@ -60,15 +60,12 @@ public class AirportServiceImpl implements AirportService{
 
 	@Override
 	public List<AirportDTO> getAllAirports() {
-		List<Airport> Airport = airportRepository.findAll();
+		List<Airport> airport = airportRepository.findAll();
 
-		List<AirportDTO> airportDTO = Airport.stream()
-
-		.map(list -> modelMapper
-
-		.map(list, AirportDTO.class ))
-
-		.collect(Collectors.toList());
+		List<AirportDTO> airportDTO = airport.stream()
+				.map(list -> modelMapper
+				.map(list, AirportDTO.class))
+				.collect(Collectors.toList());
 
 		return airportDTO;
 		
@@ -76,12 +73,7 @@ public class AirportServiceImpl implements AirportService{
 	}
 
 
-//	@Override
-//	public AirportDTO changeNameById(String newName, String id) throws AirportNotFoundException {
-//		
-//		return null;
-//	}
-//	
+
 
 	@Override
 	public String removeAirportById(String id) throws AirportNotFoundException {
@@ -113,8 +105,9 @@ public class AirportServiceImpl implements AirportService{
 		Mono<ScheduleFlightDTO[]> response = webclient.get()
 				.uri("http://localhost:8093/api/scheduleFlight/schedules")
 				.accept(MediaType.APPLICATION_JSON)
-		.retrieve()
-		. bodyToMono(ScheduleFlightDTO[].class).log();
+				.retrieve()
+				.bodyToMono(ScheduleFlightDTO[].class)
+				.log();
 		
 		ScheduleFlightDTO[] scheduleFlights = response.block();
 		
@@ -122,6 +115,22 @@ public class AirportServiceImpl implements AirportService{
 		
 		return Arrays.stream(scheduleFlights)
 				.collect(Collectors.toList());
+	}
+
+
+	@Override
+	public List<ScheduleFlightDTO> getSchedulesByAirportName(String airportName) {
+		Mono<ScheduleFlightDTO[]> response = webclient.get().uri("http://localhost:8093/api/scheduleFlight/schedules")
+				.accept(MediaType.APPLICATION_JSON)
+				.retrieve()
+				.bodyToMono(ScheduleFlightDTO[].class)
+				.log();
+
+		ScheduleFlightDTO[] scheduleFlights = response.block();
+
+		return Arrays.stream(scheduleFlights).filter(s -> (s.getSourceAirport()).equals(airportName))
+				.collect(Collectors.toList());
+		
 	}
 	
 

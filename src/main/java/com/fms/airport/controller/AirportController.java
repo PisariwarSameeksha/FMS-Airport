@@ -97,5 +97,13 @@ public class AirportController {
 		return ResponseEntity.status(HttpStatus.OK).body(flights);
 		
 	}
+	
+	@GetMapping("/airports/schedules/{name}")
+	public ResponseEntity<List<ScheduleFlightDTO>> getSchedulesByAirport(@RequestParam String airportName){
+		logger.info("Received a request to get scheduled flights for {}", airportName);
+		List<ScheduleFlightDTO> flights = airportService.getSchedulesByAirportName(airportName);
+		return ResponseEntity.status(HttpStatus.OK).body(flights);
+		
+	}
 
 }

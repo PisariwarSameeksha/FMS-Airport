@@ -24,4 +24,6 @@ public interface AirportService {
 	
 	List<ScheduleFlightDTO> getNumberOfScheduleFlights();
 	
+	List<ScheduleFlightDTO> getSchedulesByAirportName(String airportName);
+	
 }
