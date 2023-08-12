@@ -2,13 +2,13 @@ package com.fms.airport.DTO;
 
 public class AirportDTO {
 	
-	String airportId;
+	Integer airportId;
 	String airportName;
 	String airportLocation;
-	public String getAirportId() {
+	public Integer getAirportId() {
 		return airportId;
 	}
-	public void setAirportId(String airportId) {
+	public void setAirportId(Integer airportId) {
 		this.airportId = airportId;
 	}
 	public String getAirportName() {
@@ -28,7 +28,7 @@ public class AirportDTO {
 	public AirportDTO() {
 		super();
 	}
-	public AirportDTO(String airportId, String airportName, String airportLocation) {
+	public AirportDTO(Integer airportId, String airportName, String airportLocation) {
 		super();
 		this.airportId = airportId;
 		this.airportName = airportName;

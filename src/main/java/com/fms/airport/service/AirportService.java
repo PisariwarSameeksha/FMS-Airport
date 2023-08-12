@@ -14,16 +14,18 @@ public interface AirportService {
 
 	String addAirport(AirportDTO newAirportDTO);
 
-	AirportDTO getAirportById(String id) throws AirportNotFoundException;
+	AirportDTO getAirportById(Integer id) throws AirportNotFoundException;
 
 	AirportDTO getAirportByName(String name) throws AirportNotFoundException;
 
 	List<AirportDTO> getAllAirports();
 
-	String removeAirportById(String id) throws AirportNotFoundException;
+	String removeAirportById(Integer id) throws AirportNotFoundException;
 	
 	List<ScheduleFlightDTO> getNumberOfScheduleFlights();
 	
 	List<ScheduleFlightDTO> getSchedulesByAirportName(String airportName);
+	
+	String changeAirportDetails(AirportDTO updateAirport, Integer airportId) throws AirportNotFoundException;
 	
 }

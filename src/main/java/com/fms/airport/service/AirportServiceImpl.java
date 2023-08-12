@@ -46,7 +46,7 @@ public class AirportServiceImpl implements AirportService{
 	
 
 	@Override
-	public AirportDTO getAirportById(String id) throws AirportNotFoundException {
+	public AirportDTO getAirportById(Integer id) throws AirportNotFoundException {
 		Optional<Airport> optAirport = this.airportRepository.findByAirportId(id);
 		if(optAirport.isEmpty()) {
 			throw new AirportNotFoundException("Airport doesn't exist for given id");
@@ -76,7 +76,7 @@ public class AirportServiceImpl implements AirportService{
 
 
 	@Override
-	public String removeAirportById(String id) throws AirportNotFoundException {
+	public String removeAirportById(Integer id) throws AirportNotFoundException {
 		Optional<Airport> optAirport = this.airportRepository.findByAirportId(id);
 		if(optAirport == null) {
 			throw new AirportNotFoundException("Airport doesn't exist for given id");
@@ -132,6 +132,27 @@ public class AirportServiceImpl implements AirportService{
 				.collect(Collectors.toList());
 		
 	}
+
+
+	@Override
+	public String changeAirportDetails(AirportDTO updateAiport, Integer airportId) throws AirportNotFoundException{
+		
+			Optional<Airport> optAirport = this.airportRepository.findByAirportId(airportId);
+			if(optAirport.isEmpty()) {
+				throw new AirportNotFoundException("Airport doesn't exist for given id");
+			}
+			Airport airport = modelMapper.map(updateAiport, Airport.class);
+			airport.setAirportId(airportId);
+			airport.setAirportName(updateAiport.getAirportName());
+			airport.setAirportLocation(updateAiport.getAirportLocation());
+	
+			airportRepository.save(airport);
+			
+			return "Airport updated successfully";
+			
+	
+			
+		}
 	
 
 }

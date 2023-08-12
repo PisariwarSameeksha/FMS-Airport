@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +26,7 @@ import com.fms.airport.service.AirportService;
 
 @RestController 
 @RequestMapping("/api/airports")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AirportController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AirportController.class);
@@ -54,7 +58,7 @@ public class AirportController {
 	}
 
 	@GetMapping("/airport/{id}")
-	public ResponseEntity<AirportDTO> getAirportById(@RequestParam String id) {
+	public ResponseEntity<AirportDTO> getAirportById(@RequestParam Integer id) {
 
 		try {
 			logger.info("Received request to fetch details for airport with id: {}", id);
@@ -77,7 +81,7 @@ public class AirportController {
 	}
 
 	@DeleteMapping("/airports/{id}")
-	public ResponseEntity<String> deleteAirportById(@RequestParam String id) {
+	public ResponseEntity<String> deleteAirportById(@RequestParam Integer id) {
 
 		try {
 			logger.info("Received request to remove flight with Id : {}", id);
@@ -104,6 +108,15 @@ public class AirportController {
 		List<ScheduleFlightDTO> flights = airportService.getSchedulesByAirportName(airportName);
 		return ResponseEntity.status(HttpStatus.OK).body(flights);
 		
+	}
+	
+	@PutMapping("/update/{id}")
+	ResponseEntity<String> updateAirport(@PathVariable("id") Integer id, @RequestBody AirportDTO airportDTO) throws AirportNotFoundException{
+
+		logger.info("Received request to update a airport : {}", airportDTO);
+		airportService.changeAirportDetails(airportDTO,id);
+		logger.info("Airport added: {}", airportDTO);
+		return ResponseEntity.status(HttpStatus.OK).body("Updated successfully");
 	}
 
 }

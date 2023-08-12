@@ -1,19 +1,29 @@
 package com.fms.airport.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Airport {
 	
 	@Id
-	String airportId;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	Integer airportId;
 	
-	@NotNull
+	@NotBlank(message = "airport name cannot be blank")
+	@Pattern(regexp = "^[a-zA-Z '-]*$", message = "Input should not contain special characters or numbers")
+	@Size(min = 8, max = 45, message = "Input length should be between 8 and 45 characters")
 	String airportName;
 	
-	@NotNull
+	@NotBlank(message = "airport name cannot be blank")
+	@Pattern(regexp = "^[a-zA-Z '-]*$", message = "Input should not contain special characters or numbers")
+	@Size(min = 3, max = 30, message = "Input length should be between 3 and 30 characters")
 	String airportLocation;
 	
 	
@@ -21,10 +31,10 @@ public class Airport {
 	public Airport() {
 		super();
 	}
-	public String getAirportId() {
+	public Integer getAirportId() {
 		return airportId;
 	}
-	public void setAirportId(String airportId) {
+	public void setAirportId(Integer airportId) {
 		this.airportId = airportId;
 	}
 	public String getAirportName() {
@@ -39,7 +49,7 @@ public class Airport {
 	public void setAirportLocation(String airportLocation) {
 		this.airportLocation = airportLocation;
 	}
-	public Airport(String airportId, String airportName, String airportLocation) {
+	public Airport(Integer airportId, String airportName, String airportLocation) {
 		super();
 		this.airportId = airportId;
 		this.airportName = airportName;
