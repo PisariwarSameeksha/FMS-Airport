@@ -16,13 +16,9 @@ public interface AirportService {
 
 	AirportDTO getAirportById(Integer id) throws AirportNotFoundException;
 
-	AirportDTO getAirportByName(String name) throws AirportNotFoundException;
-
 	List<AirportDTO> getAllAirports();
 
 	String removeAirportById(Integer id) throws AirportNotFoundException;
-	
-	List<ScheduleFlightDTO> getNumberOfScheduleFlights();
 	
 	List<ScheduleFlightDTO> getSchedulesByAirportName(String airportName);
 	

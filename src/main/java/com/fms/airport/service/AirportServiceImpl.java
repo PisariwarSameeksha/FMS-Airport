@@ -88,34 +88,7 @@ public class AirportServiceImpl implements AirportService{
 		return "Airport deleted successfully";
 	}
 	
-	@Override
-	public AirportDTO getAirportByName(String name) throws AirportNotFoundException {
-		Optional<Airport> optAirport = this.airportRepository.findByAirportName(name);
-		if(optAirport.isEmpty()) {
-			throw new AirportNotFoundException("Airport doesn't exist for given id");
-		}
-		Airport airport = optAirport.get();
-		
-		return modelMapper.map(airport, AirportDTO.class);
-	}
-
-
-	@Override
-	public List<ScheduleFlightDTO> getNumberOfScheduleFlights() {
-		Mono<ScheduleFlightDTO[]> response = webclient.get()
-				.uri("http://localhost:8093/api/scheduleFlight/schedules")
-				.accept(MediaType.APPLICATION_JSON)
-				.retrieve()
-				.bodyToMono(ScheduleFlightDTO[].class)
-				.log();
-		
-		ScheduleFlightDTO[] scheduleFlights = response.block();
-		
-		
-		
-		return Arrays.stream(scheduleFlights)
-				.collect(Collectors.toList());
-	}
+	
 
 
 	@Override

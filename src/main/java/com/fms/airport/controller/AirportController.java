@@ -43,19 +43,7 @@ public class AirportController {
 		return ResponseEntity.status(HttpStatus.CREATED).body("Added successfully");
 	}
 
-	@GetMapping("/airports/{name}")
-	public ResponseEntity<AirportDTO> getAirportByName(@RequestParam String name) throws AirportNotFoundException {
-
-		try {
-			logger.info("Received request to fetch details for airport with name: {}", name);
-			AirportDTO airportDTO = airportService.getAirportByName(name);
-			logger.info("Airport details fetched successfully for airport with name : {}", name);
-			return ResponseEntity.status(HttpStatus.OK).body(airportDTO);
-		} catch (AirportNotFoundException e) {
-			logger.warn("Airport with name {} not found", name);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		}
-	}
+	
 
 	@GetMapping("/airport/{id}")
 	public ResponseEntity<AirportDTO> getAirportById(@RequestParam Integer id) {
@@ -94,13 +82,7 @@ public class AirportController {
 		}
 	}
 	
-	@GetMapping("/airports/schedules")
-	public ResponseEntity<List<ScheduleFlightDTO>> getAllSchedules(){
-		logger.info("Received a request to get scheduled flights");
-		List<ScheduleFlightDTO> flights = airportService.getNumberOfScheduleFlights();
-		return ResponseEntity.status(HttpStatus.OK).body(flights);
-		
-	}
+	
 	
 	@GetMapping("/airports/schedules/{name}")
 	public ResponseEntity<List<ScheduleFlightDTO>> getSchedulesByAirport(@RequestParam String airportName){
