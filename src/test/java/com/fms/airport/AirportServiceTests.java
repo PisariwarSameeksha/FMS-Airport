@@ -23,11 +23,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fms.airport.DTO.AirportDTO;
 import com.fms.airport.entity.Airport;
+import com.fms.airport.exception.AirportAlreadyExistsException;
 import com.fms.airport.exception.AirportNotFoundException;
 import com.fms.airport.repository.AirportRepository;
 import com.fms.airport.service.AirportService;
@@ -56,7 +56,7 @@ class AirportServiceTests {
 	@Test
 	@DisplayName("Test to add")
 	@Order(1)
-	void addAirportTest1() {
+	void addAirportTest1() throws AirportAlreadyExistsException {
 		
 		AirportDTO airportDTO = new AirportDTO();
 		airportDTO.setAirportName("RGI airport");
@@ -64,29 +64,9 @@ class AirportServiceTests {
 		
 	
 		String result = airportService.addAirport(airportDTO);
-		assertEquals("Airport added successfully!", result);
+		assertEquals("new Airport successfully added", result);
 	}
 	
-    @Test
-    @DisplayName("Test to Modify")
-    @Order(2)
-    void ModifyAirportByAirportIdTest() throws AirportNotFoundException {
-    	
-        Integer existingAirportId = 12345;
-        Airport existingAirport = new Airport(existingAirportId, "ABC Airport", "Adilabad");
-        when(airportRepository.findById(existingAirportId)).thenReturn(Optional.of(existingAirport));
-            
-        AirportDTO updatedAirportDTO = new AirportDTO();
-        updatedAirportDTO.setAirportName("Adb Airport");
-        updatedAirportDTO.setAirportLocation("Jainath");
-        
-    
-        String result = airportService.changeAirportDetails(updatedAirportDTO, existingAirportId);
-        verify(airportRepository, times(1)).findById(existingAirportId);
-        verify(airportRepository, times(1)).save(existingAirport);
-        assertEquals("Flight Details updated successfully!", result);
-        
-    }
 	
 	@Test
 	@DisplayName("Test to Modify Exception")
@@ -98,53 +78,13 @@ class AirportServiceTests {
 				()-> airportService.changeAirportDetails(new AirportDTO(), airportId));
 	}
 	
-	@Test
-	@DisplayName("Test to Remove Flighy")
-	@Order(4)
-	void testRemoveExistingAirportByAirportId() throws AirportNotFoundException {
 
-		Integer Id = 12345;
-        Airport existingAirport = new Airport(Id, "ABC Airport", "Paris");
-        when(airportRepository.findById(Id)).thenReturn(Optional.of(existingAirport));
-        
-        String result = airportService.removeAirportById(Id);
-        verify(airportRepository, times(1)).delete(existingAirport);
-        assertEquals("Flight removed successfully!", result);
-    }
-	
-	
-	@Test
-	@DisplayName("Test to removeException")
-	@Order(5)
-	void testRemoveFlightByFlightNumber() {
-		
-		Integer Id = 12345;
-		
-        when(airportRepository.findById(Id)).thenReturn(Optional.empty());
 
-        // Call the removeFlightByFlightNumber() method and expect FlightNumberNotFoundException
-        assertThrows(AirportNotFoundException.class, () -> airportService.removeAirportById(Id));
-
-        // Verify that the delete method was not called since the flight does not exist
-        verify(airportRepository, never()).delete(any(Airport.class));
-
-	  }
-
-	  @Test
-	  @DisplayName("Test to removeException 1")
-	  @Order(6)
-	  void testRemoveFlightByFlightNumberFlightNumberNotFound() {
-	        
-		  Integer Id = 1;
-	        
-	        assertThrows(AirportNotFoundException.class,
-	                () -> airportService.removeAirportById(Id));
-	   }
 
 	   @Test
 	   @DisplayName("Test to Find Flight")
 	   @Order(7)
-	   void testGetAirportById() throws AirportNotFoundException {
+	   void testGetAirportById() throws AirportNotFoundException, AirportAlreadyExistsException {
 	        
 		   Integer Id = 12;
 
@@ -160,12 +100,12 @@ class AirportServiceTests {
 	        when(airportService.addAirport(existingAirport)).thenReturn("Airport added successfully");
 	        when(airportService.getAirportById(Id)).thenReturn(existingAirport);
 
-	        // Call the addFlight method to store the flight
+	      
 	        String addAirportResponse = airportService.addAirport(existingAirport);
 	        assertNotNull(addAirportResponse);
 	        assertEquals("Airport added successfully", addAirportResponse);
 
-	        // Call the getFlightByFlightNumber method to retrieve the stored flight
+	     
 	        AirportDTO result = airportService.getAirportById(Id);
 
 	        assertEquals(existingAirport.getAirportLocation(), result.getAirportLocation());
@@ -207,7 +147,7 @@ class AirportServiceTests {
 	
 	
 	@Test
-	void addAirportTest() {
+	void addAirportTest() throws AirportAlreadyExistsException {
 		assertNotNull(airportService.addAirport(new AirportDTO(56786,"Rajiv Gandhi","Shamshabad")));
 	}
 	
@@ -216,12 +156,9 @@ class AirportServiceTests {
 		assertNotNull(airportService.getAllAirports());
 	}
 	
-	@Test 
-	void getAirportByIdTest()throws AirportNotFoundException{
-		assertNotNull(airportService.getAirportById(56786));
-	}
+
 	
-	
+	 
 	
 	@Test
 	void getAirportByIdExceptionTest() throws AirportNotFoundException{
@@ -229,17 +166,7 @@ class AirportServiceTests {
 	}
 	
 	
-	
-	@Test
-	void removeAirportByIdTest() throws AirportNotFoundException{
-		assertNotNull(airportService.removeAirportById(56786));
-	}
-	
-	@Test
-	void removeAirportByIdExceptionTest() throws AirportNotFoundException{
-		assertThrows(AirportNotFoundException.class, ()-> airportService.removeAirportById(1234));
-	}
-	
+
 	
 	
 

@@ -12,7 +12,7 @@ import com.fms.airport.exception.AirportNotFoundException;
 
 public interface AirportService {
 
-	String addAirport(AirportDTO newAirportDTO);
+	String addAirport(AirportDTO newAirportDTO) throws AirportAlreadyExistsException;
 
 	AirportDTO getAirportById(Integer id) throws AirportNotFoundException;
 

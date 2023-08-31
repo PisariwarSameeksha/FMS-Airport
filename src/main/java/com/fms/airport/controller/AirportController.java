@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fms.airport.DTO.AirportDTO;
 import com.fms.airport.DTO.ScheduleFlightDTO;
+import com.fms.airport.exception.AirportAlreadyExistsException;
 import com.fms.airport.exception.AirportNotFoundException;
 import com.fms.airport.service.AirportService;
 
@@ -32,10 +33,10 @@ public class AirportController {
 	private static final Logger logger = LoggerFactory.getLogger(AirportController.class);
 
 	@Autowired
-	private AirportService airportService;
+	private AirportService airportService; 
 
 	@PostMapping("/airports")
-	ResponseEntity<String> addAirport(@RequestBody AirportDTO airportDTO) {
+	ResponseEntity<String> addAirport(@RequestBody AirportDTO airportDTO) throws AirportAlreadyExistsException {
 
 		logger.info("Received request to add a airport : {}", airportDTO);
 		airportService.addAirport(airportDTO);
